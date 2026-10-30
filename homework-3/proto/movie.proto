@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package movie;
+
+option go_package = "movie_downloader/homework-3/proto;moviepb";
+
+message Movie {
+    int32 id = 1;
+    string title = 2;
+    int32 year = 3;
+    string director = 4;
+}
+
+message LoadMoviesResponse {
+    repeated Movie movies = 1;
+    string error = 2;
+}
+
+message GetLastMovieRequest {}
+
+message LoadMoviesRequest {
+    int32 from = 1;
+    int32 to = 2;
+}
+
+
+service MovieService {
+    rpc GetLastMovie(GetLastMovieRequest) returns (Movie);
+    rpc LoadMovies(LoadMoviesRequest) returns (LoadMoviesResponse);
+}
+
+
