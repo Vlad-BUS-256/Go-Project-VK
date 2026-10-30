@@ -1,0 +1,85 @@
+basePath: /
+definitions:
+  httpapi.PartialMoviesResponse:
+    properties:
+      error:
+        type: string
+      movies:
+        items:
+          $ref: '#/definitions/movie.Movie'
+        type: array
+    type: object
+  movie.Movie:
+    properties:
+      director:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+      year:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: HTTP API для загрузки фильмов и поиска последнего фильма.
+  title: Movie API
+  version: "1.0"
+paths:
+  /last-movie:
+    get:
+      description: Находит фильм с максимальным существующим ID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/movie.Movie'
+        "404":
+          description: Movie not found
+          schema:
+            type: string
+        "502":
+          description: Upstream error
+          schema:
+            type: string
+      summary: Получить последний фильм
+      tags:
+      - movies
+  /load-movies:
+    get:
+      description: Загружает фильмы от from до to включительно
+      parameters:
+      - description: Начальный ID фильма
+        in: query
+        name: from
+        required: true
+        type: integer
+      - description: Конечный ID фильма
+        in: query
+        name: to
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/movie.Movie'
+            type: array
+        "400":
+          description: Invalid movie range
+          schema:
+            type: string
+        "502":
+          description: Failed to load movies
+          schema:
+            $ref: '#/definitions/httpapi.PartialMoviesResponse'
+      summary: Загрузить фильмы по диапазону ID
+      tags:
+      - movies
+swagger: "2.0"
