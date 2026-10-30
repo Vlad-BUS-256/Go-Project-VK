@@ -1,6 +1,6 @@
 module movie_downloader
 
-go 1.27.1
+go 1.26.4
 
 require (
 	github.com/swaggo/http-swagger v1.3.4
